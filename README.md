@@ -65,3 +65,9 @@ cargo run
 ```
 cargo check
 ```
+
+- 文档
+
+```
+rustup doc
+```
