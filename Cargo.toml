@@ -6,3 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+eframe = '0.18.0'
+
+# eframe 内已引入 egui
+# egui = '0.18.1'
