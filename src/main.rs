@@ -69,9 +69,8 @@ impl eframe::App for People {
 }
 
 fn setup_egui(ctx: &egui::Context) {
-    // 参考：https://github.com/emilk/egui/blob/0.17.0/eframe/examples/custom_font.rs
-
-    // 此内容存在 bug，即：运行时闪烁，会从乱码转换到不乱码的状态
+    // 参考（废弃）：https://github.com/emilk/egui/blob/0.17.0/eframe/examples/custom_font.rs
+    // 参考（推荐）：https://github.com/emilk/egui/blob/0.18.1/examples/custom_font/src/main.rs
 
     // 从默认字体开始（我们将添加而不是替换它们）。
     let mut fonts = egui::FontDefinitions::default();
