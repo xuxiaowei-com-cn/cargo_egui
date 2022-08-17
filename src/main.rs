@@ -53,7 +53,9 @@ impl eframe::App for People {
         // 将我的字体作为等宽字体的最后后备：
         fonts.families.entry(egui::FontFamily::Monospace).or_default().push("my_font".to_owned());
 
-        // 告诉 egui 使用这些字体：
+        // 告诉 egui 使用这些字体
+        // 新字体将在下一帧开始时激活。
+        // https://docs.rs/egui/latest/egui/struct.Context.html#method.set_fonts
         ctx.set_fonts(fonts);
 
         // 中央面板
