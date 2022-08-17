@@ -45,6 +45,7 @@ impl eframe::App for People {
 
         // 安装我自己的字体（也许支持非拉丁字符）。
         // 支持 .ttf 和 .otf 文件。
+        // STSONG.TTF 来自 Windows 10 系统的 C:\Windows\Fonts\STSONG.TTF
         fonts.font_data.insert("my_font".to_owned(), egui::FontData::from_static(include_bytes!("STSONG.TTF")));
 
         // 将我的字体放在首位（最高优先级）用于比例文本：
