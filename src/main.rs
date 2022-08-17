@@ -33,9 +33,29 @@ impl Default for People {
 
 //
 impl eframe::App for People {
-
     // 每次 UI 需要重新绘制时调用
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+
+        // 参考：https://github.com/emilk/egui/blob/0.17.0/eframe/examples/custom_font.rs
+
+        // 此内容存在 bug，即：运行时闪烁，会从乱码转换到不乱码的状态
+
+        // 从默认字体开始（我们将添加而不是替换它们）。
+        let mut fonts = egui::FontDefinitions::default();
+
+        // 安装我自己的字体（也许支持非拉丁字符）。
+        // 支持 .ttf 和 .otf 文件。
+        fonts.font_data.insert("my_font".to_owned(), egui::FontData::from_static(include_bytes!("STSONG.TTF")));
+
+        // 将我的字体放在首位（最高优先级）用于比例文本：
+        fonts.families.entry(egui::FontFamily::Proportional).or_default().insert(0, "my_font".to_owned());
+
+        // 将我的字体作为等宽字体的最后后备：
+        fonts.families.entry(egui::FontFamily::Monospace).or_default().push("my_font".to_owned());
+
+        // 告诉 egui 使用这些字体：
+        ctx.set_fonts(fonts);
+
         // 中央面板
         egui::CentralPanel::default().show(ctx, |ui| {
 
