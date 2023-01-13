@@ -9,7 +9,7 @@ fn main() {
     eframe::run_native(
         "我的 egui 应用",
         options,
-        Box::new(|_cc| Box::new(People::default())),
+        Box::new(|cc| Box::new(People::new(cc))),
     );
 }
 
@@ -31,14 +31,18 @@ impl Default for People {
     }
 }
 
-//
-impl eframe::App for People {
+impl People {
+    fn new(cc: &eframe::CreationContext<'_>) -> Self {
+        setup_egui(&cc.egui_ctx);
+        Self::default()
+    }
+}
 
+impl eframe::App for People {
     // 每次 UI 需要重新绘制时调用
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         // 中央面板
         egui::CentralPanel::default().show(ctx, |ui| {
-
             // 显示大文本
             ui.heading("我的 egui 应用程序");
 
@@ -62,4 +66,39 @@ impl eframe::App for People {
             ui.label(format!("你好 '{}', 年龄 {}", self.name, self.age));
         });
     }
+}
+
+fn setup_egui(ctx: &egui::Context) {
+    // 参考（废弃）：https://github.com/emilk/egui/blob/0.17.0/eframe/examples/custom_font.rs
+    // 参考（推荐）：https://github.com/emilk/egui/blob/0.18.1/examples/custom_font/src/main.rs
+
+    // 从默认字体开始（我们将添加而不是替换它们）。
+    let mut fonts = egui::FontDefinitions::default();
+
+    // 安装我自己的字体（也许支持非拉丁字符）。
+    // 支持 .ttf 和 .otf 文件。
+    // SmileySans-Oblique.otf 来自 https://github.com/atelier-anchor/smiley-sans
+    fonts.font_data.insert(
+        "my_font".to_owned(),
+        egui::FontData::from_static(include_bytes!("SmileySans-Oblique.otf")),
+    );
+
+    // 将我的字体放在首位（最高优先级）用于比例文本：
+    fonts
+        .families
+        .entry(egui::FontFamily::Proportional)
+        .or_default()
+        .insert(0, "my_font".to_owned());
+
+    // 将我的字体作为等宽字体的最后后备：
+    fonts
+        .families
+        .entry(egui::FontFamily::Monospace)
+        .or_default()
+        .push("my_font".to_owned());
+
+    // 告诉 egui 使用这些字体
+    // 新字体将在下一帧开始时激活。
+    // https://docs.rs/egui/latest/egui/struct.Context.html#method.set_fonts
+    ctx.set_fonts(fonts);
 }
